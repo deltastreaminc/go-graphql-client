@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 	"strings"
 	"sync"
 	"time"
@@ -572,9 +573,12 @@ func (wh *websocketHandler) Close() error {
 }
 
 func newWebsocketConn(sc *SubscriptionClient) (WebsocketConn, error) {
-
+	hc := &http.Client{
+		Timeout: -1,
+	}
 	options := &websocket.DialOptions{
 		Subprotocols: []string{"graphql-ws"},
+		HTTPClient:   hc,
 	}
 	c, _, err := websocket.Dial(sc.GetContext(), sc.GetURL(), options)
 	if err != nil {
