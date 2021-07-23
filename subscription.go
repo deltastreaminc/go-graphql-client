@@ -424,15 +424,15 @@ func (sc *SubscriptionClient) Run() error {
 
 				err = json.Unmarshal(message.Payload, &out)
 				if err != nil {
-					go sub.handler(nil, err)
+					sub.handler(nil, err)
 					continue
 				}
 				if len(out.Errors) > 0 {
-					go sub.handler(nil, out.Errors)
+					sub.handler(nil, out.Errors)
 					continue
 				}
 
-				go sub.handler(out.Data, nil)
+				sub.handler(out.Data, nil)
 			case GQL_CONNECTION_ERROR:
 				sc.printLog(message, GQL_CONNECTION_ERROR)
 			case GQL_COMPLETE:
